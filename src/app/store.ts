@@ -8,7 +8,10 @@ export const store = configureStore({
   reducer: {
     admin: adminReducer,
     user: userReducer,
-    auth:authReducer;
+    auth:authReducer
 
   },
 });
+
+export type RootState =ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

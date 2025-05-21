@@ -3,10 +3,12 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 const api = axios.create({
   baseURL: '/api', // change if needed
+
+  withCredentials: true,  // for cookies / sessions
   headers: {
     'Content-Type': 'application/json',
-    withCredentials: true,  // for cookies / sessions
     
+
   },
 });
 

@@ -1,5 +1,6 @@
+// src/features/user/userSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { getRequest, postRequest, putRequest, deleteRequest } from '../../api/api';
 import { User } from '../../types';
 
 interface UserState {
@@ -14,16 +15,19 @@ const initialState: UserState = {
   error: null,
 };
 
-// Async Thunks
+// Helper for uniform error extraction
+const extractError = (err: any): string =>
+  err?.response?.data?.message || err?.message || 'Unexpected error occurred';
+
+// Thunks using centralized `api.ts`
 
 export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
   'user/fetchUsers',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/api/users');
-      return response.data;
+      return await getRequest<User[]>('/users');
     } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to fetch users');
+      return rejectWithValue(extractError(err));
     }
   }
 );
@@ -32,10 +36,9 @@ export const addUser = createAsyncThunk<User, User, { rejectValue: string }>(
   'user/addUser',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/users', userData);
-      return response.data;
+      return await postRequest<User, User>('/users', userData);
     } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to add user');
+      return rejectWithValue(extractError(err));
     }
   }
 );
@@ -44,10 +47,9 @@ export const updateUser = createAsyncThunk<User, { id: string; userData: Partial
   'user/updateUser',
   async ({ id, userData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`/api/users/${id}`, userData);
-      return response.data;
+      return await putRequest<User, Partial<User>>(`/users/${id}`, userData);
     } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to update user');
+      return rejectWithValue(extractError(err));
     }
   }
 );
@@ -56,22 +58,20 @@ export const deleteUser = createAsyncThunk<string, string, { rejectValue: string
   'user/deleteUser',
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`/api/users/${id}`);
+      await deleteRequest(`/users/${id}`);
       return id;
     } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to delete user');
+      return rejectWithValue(extractError(err));
     }
   }
 );
 
-// Slice
+//  Slice
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    // Add sync reducers here if needed later
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // Fetch Users

@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import api from '../../api/api'; // ✅ Updated from 'axios' to your custom instance
+import api from '../../api/api'; //  Updated from 'axios' to your custom instance
 import { Admin } from '../../types';
 
 interface AuthState {
@@ -17,7 +17,7 @@ const initialState: AuthState = {
   error: null,
 };
 
-// ✅ Login Admin with centralized API client
+// Login Admin with centralized API client
 export const loginAdmin = createAsyncThunk<
   Admin,
   { username: string; password: string },
@@ -34,7 +34,7 @@ export const loginAdmin = createAsyncThunk<
   }
 );
 
-// ✅ Auth Slice
+//  Auth Slice
 const authSlice = createSlice({
   name: 'auth',
   initialState,
