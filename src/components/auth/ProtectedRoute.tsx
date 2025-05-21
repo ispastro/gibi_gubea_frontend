@@ -1,18 +1,21 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuth();
-  
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" replace />;
   }
-  
+
   return <>{children}</>;
 };
 

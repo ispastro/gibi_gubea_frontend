@@ -1,39 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import { loginAdmin } from '../features/auth/authSlice';
 import { Cross, User, Lock, AlertCircle } from 'lucide-react';
 
 const AdminLogin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login } = useAuth();
-  
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { isAuthenticated, loading, error } = useSelector((state: RootState) => state.auth);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [localError, setLocalError] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setIsLoading(true);
-    
-    try {
-      const success = await login(username, password);
-      if (success) {
-        navigate('/admin');
-      } else {
-        setError(t('admin.login.error'));
-      }
-    } catch (err) {
-      setError(t('admin.login.error'));
-    } finally {
-      setIsLoading(false);
-    }
+    setLocalError('');
+    dispatch(loginAdmin({ username, password }));
   };
-  
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/admin');
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setLocalError(error);
+    }
+  }, [error]);
+
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 holy-cross-bg">
       <motion.div
@@ -50,7 +52,7 @@ const AdminLogin = () => {
             {t('admin.login.title')}
           </h2>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
@@ -73,7 +75,7 @@ const AdminLogin = () => {
                 />
               </div>
             </div>
-            
+
             <div>
               <label htmlFor="password" className="sr-only">
                 {t('admin.login.password')}
@@ -95,21 +97,21 @@ const AdminLogin = () => {
               </div>
             </div>
           </div>
-          
-          {error && (
+
+          {localError && (
             <div className="flex items-center text-red-600 text-sm mt-2">
               <AlertCircle className="h-4 w-4 mr-1" />
-              <span>{error}</span>
+              <span>{localError}</span>
             </div>
           )}
-          
+
           <div>
             <button
               type="submit"
-              disabled={isLoading}
-              className={`btn-primary w-full ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              disabled={loading}
+              className={`btn-primary w-full ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              {isLoading ? (
+              {loading ? (
                 <span className="flex items-center justify-center">
                   <span className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
                   {t('admin.login.submit')}...
