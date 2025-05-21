@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AdminSidebar from '../components/admin/AdminSidebar';
 
+
 const AdminDashboard = () => {
   const { admin } = useAuth();
   
@@ -31,3 +32,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
