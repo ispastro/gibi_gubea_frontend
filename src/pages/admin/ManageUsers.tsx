@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Plus, Edit, Trash2, X } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   fetchUsers,
   addUser,
   updateUser,
   deleteUser,
-} from '../../features/user/userSlice';
+} from '../../features/users/userSlice';
 import { User } from '../../types';
 import UserForm from '../../components/admin/UserForm';
-
+// Make sure the path below points to your actual store file and that it exports AppDispatch
+import type { AppDispatch } from '../../app/store';
 const ManageUsers = () => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-
-  const { users, loading } = useAppSelector(state => state.user);
+  const dispatch = useDispatch<AppDispatch>();
+  const { users } = useSelector((state: any) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +26,7 @@ const ManageUsers = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const filteredUsers = users.filter(user =>
+  const filteredUsers = users.filter((user: User) =>
     [user.studentid, user.firstname, user.lastname, user.baptismalname]
       .join(' ')
       .toLowerCase()
@@ -44,7 +45,9 @@ const ManageUsers = () => {
     if (modalMode === 'add') {
       dispatch(addUser(userData));
     } else if (modalMode === 'edit' && selectedUser) {
-      dispatch(updateUser({ ...userData, id: selectedUser.id }));
+      if (selectedUser.id) {
+        dispatch(updateUser({ id: selectedUser.id, userData }));
+      }
     }
     closeModal();
   };
@@ -103,7 +106,7 @@ const ManageUsers = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredUsers.map(user => (
+            {filteredUsers.map((user: User) => (
               <tr key={user.id}>
                 <td className="px-6 py-4">{user.studentid}</td>
                 <td className="px-6 py-4">{user.firstname} {user.lastname}</td>

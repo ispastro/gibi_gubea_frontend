@@ -1,7 +1,7 @@
 // src/api/api.ts
 import axios, { AxiosRequestConfig } from 'axios';
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: '/api', // change if needed
 
   withCredentials: true,  // for cookies / sessions

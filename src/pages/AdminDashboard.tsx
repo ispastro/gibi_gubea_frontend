@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+// Update the import path if your store file is located elsewhere, for example:
+import { RootState } from '../app/store';
+// Or, if the file does not exist, create 'src/store.ts' and export RootState from there.
 import AdminSidebar from '../components/admin/AdminSidebar';
 
 const AdminDashboard = () => {

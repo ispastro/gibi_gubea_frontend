@@ -9,27 +9,27 @@ import ManageAdmins from './pages/admin/ManageAdmins';
 import Analytics from './pages/admin/Analytics';
 import Dashboard from './pages/admin/Dashboard';
 import LoadingScreen from './components/ui/LoadingScreen';
-import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <Suspense fallback={<LoadingScreen />}>
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin"
+          element={
             <ProtectedRoute>
               <AdminDashboard />
             </ProtectedRoute>
-          }>
-            <Route index element={<Dashboard />} />
-            <Route path="users" element={<ManageUsers />} />
-            <Route path="admins" element={<ManageAdmins />} />
-            <Route path="analytics" element={<Analytics />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="users" element={<ManageUsers />} />
+          <Route path="admins" element={<ManageAdmins />} />
+          <Route path="analytics" element={<Analytics />} />
+        </Route>
+      </Routes>
     </Suspense>
   );
 }

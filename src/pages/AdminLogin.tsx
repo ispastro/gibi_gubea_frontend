@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../store';
+// Update the import path if your store file is in a different location, for example:
+import { RootState, AppDispatch } from '../app/store';
+// Or, if the file does not exist, create 'src/app/store.ts' and export RootState and AppDispatch from there.
 import { loginAdmin } from '../features/auth/authSlice';
 import { Cross, User, Lock, AlertCircle } from 'lucide-react';
 

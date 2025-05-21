@@ -1,16 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { logout } from '../../store/slices/authSlice';
+// Update the path below if your hooks file is located elsewhere, e.g. '../../../store/hooks' or '../store/hooks'
+// If useAppSelector is not exported from hooks, use useSelector from react-redux
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../features/auth/authSlice';
 import { Cross, Users, UserCog, BarChart2, LogOut, Home } from 'lucide-react';
+import { t } from 'i18next';
 
 const AdminSidebar = () => {
-  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const admin = useSelector((state: any) => state.auth.admin);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const admin = useAppSelector((state) => state.auth.admin);
-
   const handleLogout = () => {
     dispatch(logout());
     navigate('/admin/login');
