@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import api from '../../api/api'; //  Updated from 'axios' to your custom instance
+import { api } from '../../api/api';
 import { Admin } from '../../types';
 
 interface AuthState {
@@ -26,7 +26,7 @@ export const loginAdmin = createAsyncThunk<
   'auth/loginAdmin',
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const response = await api.post('/admins/login', { username, password }); // ✅ using api
+      const response = await api.post('/admins/login', { username, password }); // using api
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.message || 'Login failed');
@@ -60,7 +60,7 @@ const authSlice = createSlice({
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Login failed';
+        state.error = action.payload ?? 'Login failed';
       });
   },
 });

@@ -1,23 +1,25 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Search, Plus, Edit, Trash2, X, Shield, ShieldAlert } from 'lucide-react';
 import { Admin } from '../../types';
 import AdminForm from '../../components/admin/AdminForm';
 
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { addAdmin, updateAdmin, deleteAdmin } from '../../store/adminSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAdmin, updateAdmin, deleteAdmin } from '../../features/admins/adminsSlice';
+// Make sure the path below points to your actual store file and that it exports AppDispatch
+import type { AppDispatch } from '../../app/store';
+import { useTranslation } from 'react-i18next';
 
 const ManageAdmins = () => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const admins = useAppSelector(state => state.admins.admins);
 
+  const dispatch = useDispatch<AppDispatch>();
+  const admins = useSelector((state: any) => state.admins.admins);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit' | 'delete'>('add');
 
-  const filteredAdmins = admins.filter(admin => {
+  const filteredAdmins = admins.filter((admin: Admin) => {
     const searchTermLower = searchTerm.toLowerCase();
     return (
       admin.studentId.toLowerCase().includes(searchTermLower) ||
@@ -55,13 +57,16 @@ const ManageAdmins = () => {
       };
       dispatch(addAdmin(newAdmin));
     } else if (modalMode === 'edit' && selectedAdmin) {
-      dispatch(updateAdmin({ ...adminData, id: selectedAdmin.id }));
+      if (!selectedAdmin.id) {
+        throw new Error('Selected admin must have an id');
+      }
+      dispatch(updateAdmin({ id: selectedAdmin.id, adminData }));
     }
     closeModal();
   };
 
   const handleDeleteAdmin = () => {
-    if (selectedAdmin) {
+    if (selectedAdmin && selectedAdmin.id) {
       dispatch(deleteAdmin(selectedAdmin.id));
     }
     closeModal();
@@ -113,7 +118,7 @@ const ManageAdmins = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredAdmins.length > 0 ? (
-              filteredAdmins.map((admin) => (
+              filteredAdmins.map((admin: Admin) => (
                 <tr key={admin.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm font-medium text-gray-900">{admin.studentId}</td>
                   <td className="px-6 py-4 text-sm text-gray-500">{admin.adminUsername}</td>

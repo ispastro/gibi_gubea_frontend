@@ -1,7 +1,9 @@
 // src/components/forms/UserForm.tsx
-import React, { Component, ChangeEvent, FormEvent } from 'react';
+import { Component, ChangeEvent, FormEvent } from 'react';
 import { connect } from 'react-redux';
-import { RootState, AppDispatch } from '../../redux/store';
+// Update the path below to the correct location of your store file
+// Update the path below to the correct location of your store file
+import { AppDispatch } from '../../app/store';
 import { addUser, updateUser } from '../../features/users/userSlice';
 import { User } from '../../types';
 import { X } from 'lucide-react';
@@ -56,14 +58,18 @@ class UserForm extends Component<Props, State> {
   handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    let checked = false;
+    if (type === 'checkbox' && e.target instanceof HTMLInputElement) {
+      checked = e.target.checked;
+    }
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
       this.setState(prev => ({
         formData: {
           ...prev.formData,
           [parent]: {
-            ...prev.formData[parent as keyof User],
+            ...((prev.formData[parent as keyof User] || {}) as object),
             [child]: type === 'checkbox' ? checked : value,
           },
         },
@@ -181,7 +187,7 @@ class UserForm extends Component<Props, State> {
               <label className="block text-sm font-medium text-gray-700 mb-1">Sponsorship Type</label>
               <select
                 name="universityusers.sponsorshiptype"
-                value={formData.universityusers.sponsorshiptype}
+                value={formData.universityusers?.sponsorshiptype ?? ''}
                 onChange={this.handleChange}
                 className="w-full px-3 py-2 border rounded-md"
               >
@@ -194,7 +200,7 @@ class UserForm extends Component<Props, State> {
               <label className="block text-sm font-medium text-gray-700 mb-1">Participation</label>
               <select
                 name="universityusers.participation"
-                value={formData.universityusers.participation}
+                value={formData.universityusers?.participation ?? ''}
                 onChange={this.handleChange}
                 className="w-full px-3 py-2 border rounded-md"
               >
@@ -207,7 +213,7 @@ class UserForm extends Component<Props, State> {
               <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
               <select
                 name="universityusers.role"
-                value={formData.universityusers.role}
+                value={formData.universityusers?.role ?? ''}
                 onChange={this.handleChange}
                 className="w-full px-3 py-2 border rounded-md"
               >
@@ -221,7 +227,7 @@ class UserForm extends Component<Props, State> {
               <input
                 type="checkbox"
                 name="universityusers.cafeteriaaccess"
-                checked={formData.universityusers.cafeteriaaccess}
+                checked={formData.universityusers?.cafeteriaaccess ?? false}
                 onChange={this.handleChange}
                 className="h-4 w-4 text-blue-600 border-gray-300 rounded"
               />
@@ -253,7 +259,12 @@ class UserForm extends Component<Props, State> {
 // Connect Redux actions
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
   addUser: (user: User) => dispatch(addUser(user)),
-  updateUser: (user: User) => dispatch(updateUser(user)),
+  updateUser: (user: User) => {
+    if (!user.id) {
+      throw new Error('User id is required for updating a user.');
+    }
+    return dispatch(updateUser({ id: user.id, userData: user }));
+  },
 });
 
 export default connect(null, mapDispatchToProps)(UserForm);

@@ -1,19 +1,21 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { logout } from '../../store/slices/authSlice';
 import { Cross, Users, UserCog, BarChart2, LogOut, Home } from 'lucide-react';
 
 const AdminSidebar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { logout, admin } = useAuth();
-  
+  const dispatch = useAppDispatch();
+  const admin = useAppSelector((state) => state.auth.admin);
+
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     navigate('/admin/login');
   };
-  
+
   return (
     <div className="w-64 bg-liturgical-blue text-white h-screen flex flex-col">
       <motion.div 
@@ -27,7 +29,7 @@ const AdminSidebar = () => {
           {t('siteName')}
         </h1>
       </motion.div>
-      
+
       <div className="px-4 py-6 flex-1 overflow-y-auto">
         <ul className="space-y-4">
           <motion.li
@@ -48,7 +50,7 @@ const AdminSidebar = () => {
               <span>{t('admin.dashboard.title')}</span>
             </NavLink>
           </motion.li>
-          
+
           <motion.li
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -66,7 +68,7 @@ const AdminSidebar = () => {
               <span>{t('admin.dashboard.users')}</span>
             </NavLink>
           </motion.li>
-          
+
           {admin?.isSuperAdmin && (
             <motion.li
               initial={{ opacity: 0, x: -10 }}
@@ -86,7 +88,7 @@ const AdminSidebar = () => {
               </NavLink>
             </motion.li>
           )}
-          
+
           <motion.li
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -106,7 +108,7 @@ const AdminSidebar = () => {
           </motion.li>
         </ul>
       </div>
-      
+
       <motion.div 
         className="p-4 border-t border-white/10"
         initial={{ opacity: 0, y: 10 }}
