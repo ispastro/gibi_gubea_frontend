@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Plus, Edit, Trash2, X, Shield, ShieldAlert } from 'lucide-react';
 import { Admin } from '../../types';
 import AdminForm from '../../components/admin/AdminForm';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addAdmin, updateAdmin, deleteAdmin } from '../../features/admins/adminsSlice';
+import { fetchAdmins, addAdmin, updateAdmin, deleteAdmin } from '../../features/admins/adminsSlice';
 // Make sure the path below points to your actual store file and that it exports AppDispatch
 import type { AppDispatch } from '../../app/store';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,10 @@ const ManageAdmins = () => {
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit' | 'delete'>('add');
+
+  useEffect(() => {
+    dispatch(fetchAdmins());
+  }, [dispatch]);
 
   const filteredAdmins = Array.isArray(admins) 
     ? admins.filter((admin: Admin) => {

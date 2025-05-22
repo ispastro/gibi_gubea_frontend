@@ -49,3 +49,7 @@ export interface ChartData {
   name: string;
   value: number;
 }
+export interface AuthPayload{
+  admin: Admin;
+  token: string;
+}

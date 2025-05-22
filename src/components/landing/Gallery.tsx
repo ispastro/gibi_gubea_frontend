@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { galleryImages } from '../../data/mockData';
+ import  {galleryImages} from '../../data/mockData'; // Adjust the import path as necessary
 
 const Gallery = () => {
   const { t, i18n } = useTranslation();

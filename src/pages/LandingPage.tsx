@@ -6,7 +6,7 @@ import Vision from '../components/landing/Vision';
 import Structure from '../components/landing/Structure';
 import Involvement from '../components/landing/Involvement';
 import Gallery from '../components/landing/Gallery';
-import Events from '../components/landing/Events';
+// import Events from '../components/landing/Events';
 import Contact from '../components/landing/Contact';
 import Footer from '../components/landing/Footer';
 
@@ -25,7 +25,7 @@ const LandingPage = () => {
         <Structure />
         <Involvement />
         <Gallery />
-        <Events />
+        {/* <Events /> */}
         <Contact />
       </main>
       <Footer />

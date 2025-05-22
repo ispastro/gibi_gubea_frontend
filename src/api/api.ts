@@ -2,7 +2,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 export const api = axios.create({
-  baseURL: '/api', // change if needed
+  baseURL: import.meta.env.VITE_API_URL,
 
   withCredentials: true,  // for cookies / sessions
   headers: {

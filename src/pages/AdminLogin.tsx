@@ -16,14 +16,14 @@ const AdminLogin = () => {
 
   const { isAuthenticated, loading, error } = useSelector((state: RootState) => state.auth);
 
-  const [username, setUsername] = useState('');
+  const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLocalError('');
-    dispatch(loginAdmin({ username, password }));
+    dispatch(loginAdmin({ studentId, password }));
   };
 
   useEffect(() => {
@@ -58,22 +58,22 @@ const AdminLogin = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
-              <label htmlFor="username" className="sr-only">
-                {t('admin.login.username')}
+              <label htmlFor="studentId" className="sr-only">
+                {t('admin.login.studentId')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  id="username"
-                  name="username"
+                  id="studentId"
+                  name="studentId"
                   type="text"
                   required
                   className="input-field pl-10"
-                  placeholder={t('admin.login.username')}
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder={t('admin.login.studentId')}
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
                 />
               </div>
             </div>
@@ -93,6 +93,7 @@ const AdminLogin = () => {
                   required
                   className="input-field pl-10"
                   placeholder={t('admin.login.password')}
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

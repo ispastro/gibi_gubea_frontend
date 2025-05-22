@@ -2,18 +2,26 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 // Update the path below if your hooks file is located elsewhere, e.g. '../../../store/hooks' or '../store/hooks'
 // If useAppSelector is not exported from hooks, use useSelector from react-redux
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../features/auth/authSlice';
+import {  useSelector } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks'; // Adjust the path as necessary
+import { logoutAdmin } from '../../features/auth/authSlice';
 import { Cross, Users, UserCog, BarChart2, LogOut, Home } from 'lucide-react';
 import { t } from 'i18next';
 
+
 const AdminSidebar = () => {
-  const dispatch = useDispatch();
+const dispatch = useAppDispatch();
   const admin = useSelector((state: any) => state.auth.admin);
   const navigate = useNavigate();
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/admin/login');
+  const handleLogout = async () => {
+    const resultAction = await dispatch(logoutAdmin());
+    if (logoutAdmin.fulfilled.match(resultAction)) {
+      // Logout was successful
+      navigate('/admin/login');
+    } else {
+      // Handle error if needed
+      console.error('Logout failed');
+    }
   };
 
   return (
@@ -120,7 +128,7 @@ const AdminSidebar = () => {
           className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full hover:bg-white/5 transition-colors"
         >
           <LogOut size={20} />
-          <span>{t('admin.dashboard.logout')}</span>
+          <span>{t('admin.dashboard.logoutAdmin')}</span>
         </button>
       </motion.div>
     </div>
