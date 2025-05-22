@@ -13,19 +13,21 @@ const ManageAdmins = () => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch<AppDispatch>();
-  const admins = useSelector((state: any) => state.admins.admins);
+  const admins = useSelector((state: any) => state.admin.admins);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit' | 'delete'>('add');
 
-  const filteredAdmins = admins.filter((admin: Admin) => {
-    const searchTermLower = searchTerm.toLowerCase();
-    return (
-      admin.studentId.toLowerCase().includes(searchTermLower) ||
-      admin.adminUsername.toLowerCase().includes(searchTermLower)
-    );
-  });
+  const filteredAdmins = Array.isArray(admins) 
+    ? admins.filter((admin: Admin) => {
+        const searchTermLower = searchTerm.toLowerCase();
+        return (
+          admin.studentId.toLowerCase().includes(searchTermLower) ||
+          admin.adminUsername.toLowerCase().includes(searchTermLower)
+        );
+      })
+    : [];
 
   const openAddModal = () => {
     setSelectedAdmin(null);

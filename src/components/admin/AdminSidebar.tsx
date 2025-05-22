@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 // Update the path below if your hooks file is located elsewhere, e.g. '../../../store/hooks' or '../store/hooks'

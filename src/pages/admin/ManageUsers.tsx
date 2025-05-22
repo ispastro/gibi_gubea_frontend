@@ -16,7 +16,7 @@ import type { AppDispatch } from '../../app/store';
 const ManageUsers = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { users } = useSelector((state: any) => state.user);
+  const { users = [] } = useSelector((state: any) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,12 +26,14 @@ const ManageUsers = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const filteredUsers = users.filter((user: User) =>
-    [user.studentid, user.firstname, user.lastname, user.baptismalname]
-      .join(' ')
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = Array.isArray(users) 
+    ? users.filter((user: User) =>
+        [user.studentid, user.firstname, user.lastname, user.baptismalname]
+          .join(' ')
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   const openModal = (mode: 'add' | 'edit' | 'delete', user: User | null = null) => {
     setModalMode(mode);
@@ -154,7 +156,6 @@ const ManageUsers = () => {
               <UserForm
                 mode={modalMode}
                 initialData={selectedUser}
-                onSave={handleSaveUser}
                 onCancel={closeModal}
               />
             )}

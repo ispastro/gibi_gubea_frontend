@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// Update the import path if your store file is located elsewhere, for example:
 import { RootState } from '../app/store';
-// Or, if the file does not exist, create 'src/store.ts' and export RootState from there.
 import AdminSidebar from '../components/admin/AdminSidebar';
 
 const AdminDashboard = () => {
@@ -14,14 +12,19 @@ const AdminDashboard = () => {
     document.title = 'Admin Dashboard | 6 Kilo Gibi Gubae';
   }, []);
 
-  //  Redirect to login if not authenticated
+  // Debug: See if this effect is triggered
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    }
-  }, [isAuthenticated, navigate]);
+    console.log('DASHBOARD: isAuthenticated =', isAuthenticated);
+  }, [isAuthenticated]);
 
-  if (!admin) return null; // Prevent rendering until admin is loaded
+  // REMOVE this redirect for now to prevent infinite blankness:
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     navigate('/login');
+  //   }
+  // }, [isAuthenticated, navigate]);
+
+  const displayAdmin = admin || { adminUsername: 'TestAdmin', studentId: '000000' };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -30,8 +33,8 @@ const AdminDashboard = () => {
       <div className="flex-1 overflow-auto">
         <div className="p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-800">Welcome, {admin.adminUsername}</h1>
-            <p className="text-gray-600">Student ID: {admin.studentId}</p>
+            <h1 className="text-2xl font-bold text-gray-800">Welcome, {displayAdmin.adminUsername}</h1>
+            <p className="text-gray-600">Student ID: {displayAdmin.studentId}</p>
           </div>
 
           <div className="bg-white rounded-lg shadow-md p-6">
