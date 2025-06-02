@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.png'; // Adjust the path as necessary
 
 const Hero = () => {
   const { t, i18n } = useTranslation();
@@ -23,11 +24,9 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="inline-block p-4 bg-gold/20 rounded-full mb-8">
-            <div className="w-24 h-24 flex items-center justify-center bg-white rounded-full">
-              <svg viewBox="0 0 24 24" width="60" height="60" fill="#1A237E" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C11.4477 2 11 2.44772 11 3V10H5C4.44772 10 4 10.4477 4 11V13C4 13.5523 4.44772 14 5 14H11V21C11 21.5523 11.4477 22 12 22H14C14.5523 22 15 21.5523 15 21V14H20C20.5523 14 21 13.5523 21 13V11C21 10.4477 20.5523 10 20 10H15V3C15 2.44772 14.5523 2 14 2H12Z" />
-              </svg>
+          <div className="inline-block  rounded-full mb-8">
+            <div className="flex items-center justify-center bg-white p-4 rounded-full">
+              <img src={logo}  className="w-16 h-16 object-contain " />
             </div>
           </div>
           

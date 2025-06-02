@@ -77,7 +77,7 @@ const dispatch = useAppDispatch();
             </NavLink>
           </motion.li>
 
-          {admin?.isSuperAdmin && (
+          {/* {admin.isSuperAdmin && ( */}
             <motion.li
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -95,7 +95,7 @@ const dispatch = useAppDispatch();
                 <span>{t('admin.dashboard.admins')}</span>
               </NavLink>
             </motion.li>
-          )}
+          
 
           <motion.li
             initial={{ opacity: 0, x: -10 }}

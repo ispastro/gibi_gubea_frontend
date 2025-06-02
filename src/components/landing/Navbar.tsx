@@ -1,9 +1,11 @@
 import  { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Menu, X, Cross } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import { Link } from 'react-router-dom';
+import headerLogo from '../../assets/headerLogo.png'; // Adjust the path as necessary
+
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -44,7 +46,7 @@ const Navbar = () => {
     <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <Cross className="text-liturgical-blue" size={24} />
+     <img src={headerLogo} alt="Header Logo" className={`w-10 h-10 rounded-full ${scrolled ? 'opacity-100' : 'opacity-80'}`} />
           <h1 className={`font-bold text-xl ${scrolled ? 'text-liturgical-blue' : 'text-white'}`}>
             {t('siteName')}
           </h1>

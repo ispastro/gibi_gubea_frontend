@@ -7,7 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../app/store';
 // Or, if the file does not exist, create 'src/app/store.ts' and export RootState and AppDispatch from there.
 import { loginAdmin } from '../features/auth/authSlice';
-import { Cross, User, Lock, AlertCircle } from 'lucide-react';
+// Adjust the path as necessary
+import { User, Lock, AlertCircle } from 'react-feather';
+import headerLogo from '../assets/headerLogo.png'; // Adjust the path as necessary
 
 const AdminLogin = () => {
   const { t } = useTranslation();
@@ -47,9 +49,16 @@ const AdminLogin = () => {
         transition={{ duration: 0.5 }}
       >
         <div>
-          <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-liturgical-blue/10">
-            <Cross className="h-8 w-8 text-liturgical-blue" />
-          </div>
+          <div className="rounded-full mb-8">
+  <div className="flex items-center justify-center bg-white p-4 rounded-full">
+    <img
+      src={headerLogo}
+      className="w-16 h-16 object-contain rounded-full"
+      alt="Logo"
+    />
+  </div>
+</div>
+
           <h2 className="mt-6 text-center text-3xl font-extrabold text-liturgical-blue">
             {t('admin.login.title')}
           </h2>

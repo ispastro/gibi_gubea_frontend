@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Cross, Heart } from 'lucide-react';
+import logo from '../../assets/logo.png'; // Adjust the path as necessary
 
 const Footer = () => {
   const { t, i18n } = useTranslation();
@@ -16,7 +16,7 @@ const Footer = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center space-x-2 mb-4">
-            <Cross className="text-gold" size={24} />
+            <img src={logo} alt="Logo" className="w-12 h-12 rounded-full" />
             <h2 className={`font-bold text-xl ${i18n.language === 'am' ? 'amharic' : ''}`}>
               {t('siteName')}
             </h2>
@@ -29,8 +29,8 @@ const Footer = () => {
           </p>
           
           <p className="text-white/70 text-sm flex items-center justify-center">
-            &copy; {new Date().getFullYear()} 6 Kilo Gibi Gubae 
-            <Heart size={14} className="mx-1 text-gold" fill="#D4AF37" /> 
+            &copy; {new Date().getFullYear()} 6 Kilo Gibi Gubae
+            <img src={logo} alt="Logo" className="mx-1 w-4 h-4 rounded-full" />
             {i18n.language === 'am' ? 'በተማሪዎች' : 'Made with love by students'}
           </p>
         </motion.div>
