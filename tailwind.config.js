@@ -19,8 +19,7 @@ export default {
         'noto-ethiopic': ['Noto Serif Ethiopic', 'serif'],
       },
       backgroundImage: {
-        'sacred-texture': "url('/src/assets/images/sacred-texture.jpg')",
-        'stone-bg': "url('/src/assets/images/stone-bg.jpg')",
+        'hero-pattern': "url('/src/assets/backgroundImage.jpg')", 
       },
     },
   },

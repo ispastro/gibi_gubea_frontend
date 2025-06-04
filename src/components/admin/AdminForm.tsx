@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { Admin } from '../../types';
+// Adjust the path as necessary
 
 interface AdminFormProps {
   mode: 'add' | 'edit';
