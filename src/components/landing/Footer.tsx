@@ -24,7 +24,7 @@ const Footer = () => {
           
           <p className={`max-w-lg mx-auto mb-6 ${i18n.language === 'am' ? 'amharic' : ''}`}>
             {i18n.language === 'am' 
-              ? 'መንፈሳዊ ለሆኑ የአዲስ አበባ ዩኒቨርሲቲ ተማሪዎች መልካም መንፈሳዊ አብሮነት'
+              ? ' የአዲስ አበባ ዩኒቨርሲቲ ተማሪዎች መልካም መንፈሳዊ አብሮነት'
               : 'Providing spiritual community for Orthodox students at Addis Ababa University'}
           </p>
           

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import backgroundImage from '../../assets/backgroundImage.jpg'; //  You imported it
+import backgroundImage from '../../assets/backgroundImage.jpg';
 
 const Hero = () => {
   const { t, i18n } = useTranslation();
@@ -29,7 +29,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-liturgical-blue/50 z-0"></div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-20 relative z-10 text-center">
+      <div className="container mx-auto px-4 py-20 relative z-10 flex flex-col items-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,35 +49,36 @@ const Hero = () => {
             {t('hero.subtitle')}
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onClick={scrollToAbout} className="btn-gold">
-              {t('hero.cta')}
-            </button>
-
-            <Link to="/admin/login" className="btn-secondary text-white border-white hover:bg-white/20">
+          {/* Vertically stacked buttons */}
+          <div className="flex flex-col items-center space-y-6 mt-4">
+            <Link
+              to="/admin/login"
+              className="btn-gold text-white border-white hover:bg-white/20"
+            >
               {t('hero.login')}
             </Link>
+
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 1,
+                delay: 1,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            >
+              <button
+                onClick={scrollToAbout}
+                className="flex flex-col items-center justify-center transform -translate-x-2"
+              >
+                <span className="mb-2 text-sm font-medium text-white">{t('hero.cta')}</span>
+                <ChevronDown size={24} className="text-white" />
+              </button>
+            </motion.div>
           </div>
         </motion.div>
       </div>
-
-      {/* Scroll Down Indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 1,
-          delay: 1,
-          repeat: Infinity,
-          repeatType: 'reverse',
-        }}
-      >
-        <button onClick={scrollToAbout} className="flex flex-col items-center">
-          <span className="mb-2 text-sm font-medium">{t('hero.cta')}</span>
-          <ChevronDown size={24} />
-        </button>
-      </motion.div>
     </section>
   );
 };

@@ -60,7 +60,7 @@ const Navbar = () => {
               { key: 'vision', id: 'vision' },
               { key: 'structure', id: 'structure' },
               { key: 'involvement', id: 'involvement' },
-              { key: 'gallery', id: 'gallery' },
+            
               { key: 'events', id: 'events' },
               { key: 'contact', id: 'contact' },
             ].map(item => (
@@ -109,7 +109,7 @@ const Navbar = () => {
               { key: 'vision', id: 'vision' },
               { key: 'structure', id: 'structure' },
               { key: 'involvement', id: 'involvement' },
-              { key: 'gallery', id: 'gallery' },
+          
               { key: 'events', id: 'events' },
               { key: 'contact', id: 'contact' },
             ].map(item => (

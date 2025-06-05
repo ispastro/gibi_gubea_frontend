@@ -53,7 +53,7 @@
       },
       {
         "name": "Choir",
-        "amharic": "መዝሙራን",
+        "amharic": "መዘምራን",
         "description": "Leads the traditional Ethiopian Orthodox chanting and hymns during services."
       },
       {
@@ -63,7 +63,7 @@
       },
       {
         "name": "Faithful",
-        "amharic": "መሃይማኖት",
+        "amharic": "ሃይማኖት",
         "description": "Regular members who participate in spiritual activities and services."
       }
     ],
@@ -82,13 +82,13 @@
     "advisors": "Spiritual advisors are available to help students navigate their faith journey during their university education.",
     "activities": [
       {
-        "name": "Cross Procession",
-        "amharic": "መስቀል አቀባበል",
-        "description": "A sacred ceremony where we solemnly carry the cross in procession."
+        "name": "Epiphany Celebration",
+        "amharic": "የጥምቀት በዓል ",
+        "description": "A celebration of the baptism of Jesus christ."
       },
       {
         "name": "Prayer Ritual",
-        "amharic": "የእንቁጣጣሽ ሥርዓት",
+        "amharic": "የጸሎት ሥርዓት",
         "description": "Traditional prayer sessions that connect us with our ancient roots."
       },
       {
@@ -98,10 +98,7 @@
       }
     ]
   },
-  "gallery": {
-    "title": "Gallery",
-    "description": "Images from our gatherings, celebrations, and spiritual events"
-  },
+
   "events": {
     "title": "Events & Announcements",
     "upcoming": "Upcoming Events",
