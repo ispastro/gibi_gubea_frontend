@@ -1,3 +1,4 @@
+// src/features/auth/authSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { api } from '../../api/api';
 import { Admin } from '../../types';
@@ -18,7 +19,6 @@ const initialState: AuthState = {
   error: null,
 };
 
-// 🥷 Login Thunk
 export const loginAdmin = createAsyncThunk<
   { admin: Admin; token: string },
   { studentId: string; password: string },
@@ -26,15 +26,12 @@ export const loginAdmin = createAsyncThunk<
 >('auth/loginAdmin', async ({ studentId, password }, { rejectWithValue }) => {
   try {
     const response = await api.post('/admin/login', { studentId, password });
-    const { admin, token } = response.data;
-    localStorage.setItem('admin_token', token);
-    return { admin, token };
+    return response.data;
   } catch (err: any) {
     return rejectWithValue(err.response?.data?.message || 'Login failed');
   }
 });
 
-// 🧼 Logout Thunk
 export const logoutAdmin = createAsyncThunk<
   void,
   void,
@@ -50,7 +47,11 @@ export const logoutAdmin = createAsyncThunk<
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    clearAuthError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginAdmin.pending, (state) => {
@@ -62,18 +63,28 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.admin = action.payload.admin;
         state.token = action.payload.token;
+        localStorage.setItem('admin_token', action.payload.token);
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ?? 'Login failed';
+        state.error = action.payload || 'Login failed';
+      })
+      .addCase(logoutAdmin.pending, (state) => {
+        state.loading = true;
       })
       .addCase(logoutAdmin.fulfilled, (state) => {
+        state.loading = false;
         state.isAuthenticated = false;
         state.admin = null;
         state.token = null;
         state.error = null;
+      })
+      .addCase(logoutAdmin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Logout failed';
       });
   },
 });
 
+export const { clearAuthError } = authSlice.actions;
 export default authSlice.reducer;

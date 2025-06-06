@@ -1,22 +1,22 @@
+// src/pages/AdminLogin.tsx
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// Update the import path if your store file is in a different location, for example:
 import { RootState, AppDispatch } from '../app/store';
-// Or, if the file does not exist, create 'src/app/store.ts' and export RootState and AppDispatch from there.
-import { loginAdmin } from '../features/auth/authSlice';
-// Adjust the path as necessary
+import { loginAdmin, clearAuthError } from '../features/auth/authSlice';
 import { User, Lock, AlertCircle } from 'react-feather';
-import headerLogo from '../assets/headerLogo.png'; // Adjust the path as necessary
+import headerLogo from '../assets/headerLogo.png';
 
 const AdminLogin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { isAuthenticated, loading, error } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, loading, error } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +25,7 @@ const AdminLogin = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLocalError('');
+    dispatch(clearAuthError());
     dispatch(loginAdmin({ studentId, password }));
   };
 
@@ -40,6 +41,12 @@ const AdminLogin = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearAuthError());
+    };
+  }, [dispatch]);
+
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 holy-cross-bg">
       <motion.div
@@ -50,14 +57,14 @@ const AdminLogin = () => {
       >
         <div>
           <div className="rounded-full mb-8">
-  <div className="flex items-center justify-center bg-white p-4 rounded-full">
-    <img
-      src={headerLogo}
-      className="w-16 h-16 object-contain rounded-full"
-      alt="Logo"
-    />
-  </div>
-</div>
+            <div className="flex items-center justify-center bg-white p-4 rounded-full">
+              <img
+                src={headerLogo}
+                className="w-16 h-16 object-contain rounded-full"
+                alt="Logo"
+              />
+            </div>
+          </div>
 
           <h2 className="mt-6 text-center text-3xl font-extrabold text-liturgical-blue">
             {t('admin.login.title')}
@@ -79,7 +86,7 @@ const AdminLogin = () => {
                   name="studentId"
                   type="text"
                   required
-                  className="input-field pl-10"
+                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder={t('admin.login.studentId')}
                   value={studentId}
                   onChange={(e) => setStudentId(e.target.value)}
@@ -100,7 +107,7 @@ const AdminLogin = () => {
                   name="password"
                   type="password"
                   required
-                  className="input-field pl-10"
+                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder={t('admin.login.password')}
                   autoComplete="current-password"
                   value={password}
@@ -121,7 +128,9 @@ const AdminLogin = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`btn-primary w-full ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                loading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
               {loading ? (
                 <span className="flex items-center justify-center">
