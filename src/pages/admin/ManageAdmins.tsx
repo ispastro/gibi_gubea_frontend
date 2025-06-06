@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Search, Plus, Edit, Trash2, X, Shield, ShieldAlert } from 'lucide-react';
 import { Admin } from '../../types';
@@ -5,15 +6,14 @@ import AdminForm from '../../components/admin/AdminForm';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAdmins, addAdmin, updateAdmin, deleteAdmin } from '../../features/admins/adminsSlice';
-// Make sure the path below points to your actual store file and that it exports AppDispatch
 import type { AppDispatch } from '../../app/store';
 import { useTranslation } from 'react-i18next';
 
 const ManageAdmins = () => {
   const { t } = useTranslation();
-
   const dispatch = useDispatch<AppDispatch>();
   const admins = useSelector((state: any) => state.admin.admins);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,12 +23,12 @@ const ManageAdmins = () => {
     dispatch(fetchAdmins());
   }, [dispatch]);
 
-  const filteredAdmins = Array.isArray(admins) 
+  const filteredAdmins = Array.isArray(admins)
     ? admins.filter((admin: Admin) => {
-        const searchTermLower = searchTerm.toLowerCase();
+        const term = searchTerm.toLowerCase();
         return (
-          admin.studentId.toLowerCase().includes(searchTermLower) ||
-          admin.adminUsername.toLowerCase().includes(searchTermLower)
+          admin.studentId.toLowerCase().includes(term) ||
+          admin.adminUsername.toLowerCase().includes(term)
         );
       })
     : [];
@@ -51,40 +51,29 @@ const ManageAdmins = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   const handleSaveAdmin = (adminData: Admin) => {
     if (modalMode === 'add') {
-      const newAdmin = {
-        ...adminData,
-        id: String(Date.now()), // Replace with backend-generated ID if needed
-      };
-      dispatch(addAdmin(newAdmin));
-    } else if (modalMode === 'edit' && selectedAdmin) {
-      if (!selectedAdmin.id) {
-        throw new Error('Selected admin must have an id');
-      }
+      dispatch(addAdmin({ ...adminData, id: String(Date.now()) }));
+    } else if (modalMode === 'edit' && selectedAdmin?.id) {
       dispatch(updateAdmin({ id: selectedAdmin.id, adminData }));
     }
     closeModal();
   };
 
   const handleDeleteAdmin = () => {
-    if (selectedAdmin && selectedAdmin.id) {
-      dispatch(deleteAdmin(selectedAdmin.id));
-    }
+    if (selectedAdmin?.id) dispatch(deleteAdmin(selectedAdmin.id));
     closeModal();
   };
 
   return (
-    <div>
+    <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">{t('admin.dashboard.admins')}</h2>
-        <button 
+        <button
           onClick={openAddModal}
-          className="btn-primary flex items-center"
+          className="btn-primary flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           <Plus size={18} className="mr-2" />
           Add Admin
@@ -97,7 +86,7 @@ const ManageAdmins = () => {
         </div>
         <input
           type="text"
-          className="input-field pl-10"
+          className="input-field pl-10 w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Search admins..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -112,22 +101,22 @@ const ManageAdmins = () => {
         )}
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg border">
+      <div className="overflow-x-auto bg-white rounded-lg border shadow">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Student ID</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Username</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Role</th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-100">
             {filteredAdmins.length > 0 ? (
               filteredAdmins.map((admin: Admin) => (
                 <tr key={admin.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">{admin.studentId}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{admin.adminUsername}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{admin.studentId}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{admin.adminUsername}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center">
                       {admin.isSuperAdmin ? (
@@ -150,11 +139,15 @@ const ManageAdmins = () => {
                       </button>
                       <button
                         onClick={() => openDeleteModal(admin)}
-                        className="text-red-600 hover:text-red-900"
+                        className={`${
+                          admin.adminUsername === 'admin'
+                            ? 'text-red-300 cursor-not-allowed'
+                            : 'text-red-600 hover:text-red-900'
+                        }`}
                         disabled={admin.adminUsername === 'admin'}
                         title={admin.adminUsername === 'admin' ? 'Cannot delete main admin' : ''}
                       >
-                        <Trash2 size={18} className={admin.adminUsername === 'admin' ? 'opacity-30 cursor-not-allowed' : ''} />
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   </td>
@@ -172,10 +165,10 @@ const ManageAdmins = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
             {modalMode === 'delete' ? (
-              <div className="p-6">
+              <>
                 <h3 className="text-xl font-semibold mb-4">{t('forms.confirm')}</h3>
                 <p className="mb-6">Are you sure you want to delete admin "{selectedAdmin?.adminUsername}"?</p>
                 <div className="flex justify-end space-x-3">
@@ -186,7 +179,7 @@ const ManageAdmins = () => {
                     {t('forms.yes')}
                   </button>
                 </div>
-              </div>
+              </>
             ) : (
               <AdminForm mode={modalMode} initialData={selectedAdmin} onSave={handleSaveAdmin} onCancel={closeModal} />
             )}

@@ -5,41 +5,45 @@ import { Admin } from '../../types';
 interface AuthState {
   isAuthenticated: boolean;
   admin: Admin | null;
+  token: string | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
-  isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem('admin_token'),
   admin: null,
+  token: localStorage.getItem('admin_token') || null,
   loading: false,
   error: null,
 };
 
-// 🥷 Login Thunk (expecting { admin } only)
+// 🥷 Login Thunk
 export const loginAdmin = createAsyncThunk<
-  Admin,
+  { admin: Admin; token: string },
   { studentId: string; password: string },
   { rejectValue: string }
 >('auth/loginAdmin', async ({ studentId, password }, { rejectWithValue }) => {
   try {
-    const response = await api.post('/admins/login', { studentId, password });
-    return response.data.admin; //  Make sure backend sends `{ admin }`
+    const response = await api.post('/admin/login', { studentId, password });
+    const { admin, token } = response.data;
+    localStorage.setItem('admin_token', token);
+    return { admin, token };
   } catch (err: any) {
     return rejectWithValue(err.response?.data?.message || 'Login failed');
   }
 });
 
-// 🥷 Logout Thunk (calls /admins/logout)
+// 🧼 Logout Thunk
 export const logoutAdmin = createAsyncThunk<
   void,
   void,
   { rejectValue: string }
 >('auth/logoutAdmin', async (_, { rejectWithValue }) => {
   try {
-    await api.post('/admins/logout');
+    localStorage.removeItem('admin_token');
   } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || 'Logout failed');
+    return rejectWithValue('Logout failed');
   }
 });
 
@@ -53,10 +57,11 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginAdmin.fulfilled, (state, action: PayloadAction<Admin>) => {
+      .addCase(loginAdmin.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
-        state.admin = action.payload;
+        state.admin = action.payload.admin;
+        state.token = action.payload.token;
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.loading = false;
@@ -65,6 +70,7 @@ const authSlice = createSlice({
       .addCase(logoutAdmin.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.admin = null;
+        state.token = null;
         state.error = null;
       });
   },

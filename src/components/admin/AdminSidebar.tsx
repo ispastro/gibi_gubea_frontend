@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../store/hooks';
 import { logoutAdmin } from '../../features/auth/authSlice';
-import { Cross, Users, UserCog, BarChart2, LogOut, Home, Menu } from 'lucide-react';
+import { Users, UserCog, BarChart2, LogOut, Home, Menu } from 'lucide-react';
 import { t } from 'i18next';
 import { useState, useEffect, useCallback } from 'react';
+import headerLogo from '../../assets/headerLogo.png'; // Adjust the path as necessary
 
 const AdminSidebar = () => {
   const dispatch = useAppDispatch();
@@ -15,12 +16,10 @@ const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // Close sidebar on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  // Handle screen resizing
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
@@ -50,18 +49,16 @@ const AdminSidebar = () => {
       {/* Mobile Top Bar */}
       <div className="md:hidden bg-liturgical-blue text-white sticky top-0 z-40">
         <div className="flex justify-between items-center px-4 py-3 h-16">
-          {/* Logo only, no text */}
           <div className="flex items-center space-x-2">
-            <Cross className="text-gold" size={24} />
+            <img src={headerLogo} alt="Logo" className="w-10 h-10 rounded-full" />
           </div>
-          {/* Menu Icon */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? t('aria.closeMenu') : t('aria.openMenu')}
             aria-expanded={isOpen}
             className="p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-gold"
           >
-            {isOpen ? <Cross size={24} /> : <Menu size={24} />}
+            <Menu size={24} />
           </button>
         </div>
       </div>
@@ -77,23 +74,13 @@ const AdminSidebar = () => {
               transition={{ type: 'tween', duration: 0.3 }}
               className="fixed top-0 left-0 z-50 h-full w-64 bg-liturgical-blue text-white shadow-xl md:relative md:z-auto"
             >
-              {/* Title shown only in sidebar */}
-              <div className="flex items-center justify-between px-4 py-4 border-b border-white/10 md:hidden">
-                <div className="flex items-center space-x-2">
-                  <Cross className="text-gold" size={24} />
-                  <h1 className="font-bold text-xl">{t('siteName')}</h1>
-                </div>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-white focus:outline-none"
-                  aria-label={t('aria.closeMenu')}
-                >
-                  <Cross size={24} />
-                </button>
+              {/* Logo */}
+              <div className="flex items-center px-4 py-6">
+                <img src={headerLogo} alt="Header Logo" className="w-12 h-12 rounded-full" />
               </div>
 
               {/* Navigation Links */}
-              <div className="px-4 py-6 flex-1 overflow-y-auto">
+              <div className="px-4 py-4 flex-1 overflow-y-auto">
                 <ul className="space-y-2">
                   {navLinks.map(({ to, icon, label }, index) => (
                     <motion.li
@@ -132,13 +119,13 @@ const AdminSidebar = () => {
               </div>
             </motion.div>
 
-            {/* Overlay for Mobile */}
+            {/* Mobile Overlay */}
             {isMobile && isOpen && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+                className="fixed inset-0 bg-black/50 z-40 md:hidden"
                 onClick={() => setIsOpen(false)}
                 aria-hidden="true"
               />
